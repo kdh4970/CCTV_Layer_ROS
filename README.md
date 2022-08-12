@@ -16,7 +16,8 @@ Tensorflow version : 2.3.0
 USB mono camera : PWC 500 (2EA)  
 
 ## How to Use
-First. Download yolov4-tiny.weights into 'data' folder.(https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights) 
+First. Download yolov4-tiny.weights into 'data' folder.  
+(https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights)  
 Second. 
 
 ```
