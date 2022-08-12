@@ -15,5 +15,14 @@ OpenCV version : 4.1.1.26
 Tensorflow version : 2.3.0  
 USB mono camera : PWC 500 (2EA)  
 
+## How to Use
+First. Download yolov4-tiny.weights into 'data' folder.(https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights) 
+Second. 
+
+```
+# save yolov4-tiny model
+python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints/yolov4-tiny-416 --model yolov4 --tiny
+```
+
 ## Base package
 TheAIGuysCode - yolov4-deepsort (https://github.com/theAIGuysCode/yolov4-deepsort)
