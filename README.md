@@ -20,7 +20,7 @@ USB mono camera : PWC 500 (2EA)
 First. Download yolov4-tiny.weights into 'data' folder.  
 (https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights)  
 
-Second. Run save_model.py
+Second. Run save_model.py on terminal.
 ```
 # save yolov4-tiny model
 python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints/yolov4-tiny-416 --model yolov4 --tiny
@@ -37,6 +37,8 @@ After find below line, change between * and *.
 ```python
 model_filename = '/home/*sh/catkin_ws/src/ros_yolov4*/src/model_data/mars-small128.pb'
 ```
+Final. Do catkin_make.  
+
 
 ## How to Use  
 First. Connect two usbwebcam.  
