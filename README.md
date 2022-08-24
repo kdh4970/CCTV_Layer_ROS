@@ -3,7 +3,7 @@
 This package purpose is to use deepsort-yolov4 on ROS.   
 Finally, /YOLO node publish topic(/points).
 
-## Developemnt Environment
+## Development Environment
 
 OS : Ubuntu 18.04 LTS  
 Meta OS : ROS1-melodic  
