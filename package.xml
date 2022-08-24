@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ros_yolov4</name>
-  <version>0.0.0</version>
-  <description>The ros_yolov4 package</description>
+  <name>CCTV_Layer_ROS</name>
+  <version>0.1.0</version>
+  <description>The CCTV_Layer_ROS package</description>
 
   <maintainer email="sh@todo.todo">sh</maintainer>
   <license>TODO</license>
