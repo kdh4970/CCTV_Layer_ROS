@@ -1,4 +1,4 @@
-# CCTV_Layer_ROS
+# cctv_layer_ros
 2022 Capstone Design (A - AGV)
 This package purpose is to use deepsort-yolov4 on ROS.   
 Finally, /YOLO node publish topic(/points).
