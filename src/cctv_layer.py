@@ -4,7 +4,7 @@ from matplotlib.cbook import index_of
 import rospy
 import roslib
 roslib.load_manifest('cctv_layer_ros')
-from cctv_layer_ros.msg import Locations, Coordinate
+from cctv_layer_ros.msg import MultiPoint
 import os
 # comment out below line to enable tensorflow logging outputs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -222,7 +222,6 @@ def yolo2(result_points,points_3D,points_2D,encoder,infer,frame,image_data):
     scores, classes, valid_detections = None, None, None
     Homo_mtx, status = cv2.findHomography(points_2D,points_3D)
 
-    
     batch_data = tf.constant(image_data)
     pred_bbox = infer(batch_data)
     for key, value in pred_bbox.items():
@@ -306,11 +305,14 @@ def main(_argv):
 
     #initialize ROS node
     rospy.init_node('Desktop_YOLO', anonymous=False)
-    pub = rospy.Publisher("/points",Locations,queue_size=10)
-    rate = rospy.Rate(10)
+    pub = rospy.Publisher("/points",MultiPoint,queue_size=5)
+    rate = rospy.Rate(6)
     count = 1
 
+    rospy.loginfo("Loading YOLO...")
+
     cal_val = np.zeros((100,480,2)) # make calibration array
+
     # Definition of the parameters
     max_cosine_distance = 0.4
     nn_budget = None
@@ -354,12 +356,12 @@ def main(_argv):
 
 
     out = None
-
+    rospy.loginfo("Loading Complete...")
     frame_num = 0
     # while video is running
     while not rospy.is_shutdown():
-        loc = Locations()
-        loc.msg_seq = count
+        person_loc_pub = MultiPoint()
+        person_loc_pub.msg_seq = count
         
         return_value, frame = vid.read()
         return_value2, frame2 = vid2.read()
@@ -404,16 +406,18 @@ def main(_argv):
         #result2, map_2D, result_points = yolo(result_points,np.array([[418, 535], [537, 456], [378, 306], [317, 424]]),np.array([[352, 240], [225, 206], [68, 333], [268, 349]]),encoder,infer,frame2,image_data2)
         #result, map_2D, result_points = yolo(result_points,np.array([[180, 252], [412, 257], [420, 171], [164, 120]]),np.array([[458, 424], [495, 253], [385, 237], [201, 426]]),encoder,infer,frame,image_data1)
 
-        loc_size = len(result_points)
-        for i in range(loc_size):
+        person_loc_pub_size = len(result_points)
+        for i in range(person_loc_pub_size):
             x_value = result_points[i][0]
             y_value = result_points[i][1]
-            loc.location.append(Coordinate(x=x_value,y=y_value))
+            #loc.location.append(Coordinate(x=x_value,y=y_value))
+            person_loc_pub.x.append(x_value)
+            person_loc_pub.y.append(y_value)
         print("-"*10)
-        print("Message Sequence:", loc.msg_seq)
-        print("Result : ",result_points)
+        print("Message Sequence:", person_loc_pub.msg_seq)
+        print("Result : ",list(zip(person_loc_pub.x,person_loc_pub.y)))
         print("\n")
-        pub.publish(loc)
+        pub.publish(person_loc_pub)
         rate.sleep()
         count+=1
 

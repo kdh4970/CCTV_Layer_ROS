@@ -12,6 +12,7 @@ add_message_files(
   FILES
   Locations.msg
   Coordinate.msg
+  MultiPoint.msg
 )
 
 generate_messages(
@@ -20,6 +21,7 @@ generate_messages(
 )
 
 include_directories(
+  include
   src/core
   src/deep_sort
   src/tools
@@ -28,6 +30,7 @@ include_directories(
 
 catkin_install_python(PROGRAMS
   src/tracker0515.py
+  src/cctv_layer.py
   src/object_tracker.py
   src/receive_point.py
   src/convert_tflite.py
@@ -52,5 +55,3 @@ catkin_install_python(PROGRAMS
   src/tools/generate_detections.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-
-
