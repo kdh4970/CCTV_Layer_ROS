@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(CCTV_Layer_ROS)
+project(cctv_layer_ros)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
