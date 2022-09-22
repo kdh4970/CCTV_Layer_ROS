@@ -32,11 +32,6 @@ You should add 'msg' folder to PYTHONPATH.
 Fourth. Set flags.define paths ( main script - track0515.py )  
 Change weights, video, output path.  
 
-Fifth. Set model path (main script - tracker0515.py) 
-After find below line, change between * and *.
-```python
-model_filename = '/home/*sh/catkin_ws/src/ros_yolov4*/src/model_data/mars-small128.pb'
-```
 Final. Do catkin_make.  
 
 

@@ -3,8 +3,8 @@ from __future__ import print_function
 from matplotlib.cbook import index_of
 import rospy
 import roslib
-roslib.load_manifest('ros_yolov4')
-from ros_yolov4.msg import Locations, Coordinate
+roslib.load_manifest('CCTV_Layer_ROS')
+from CCTV_Layer_ROS.msg import Locations, Coordinate
 import os
 # comment out below line to enable tensorflow logging outputs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -32,13 +32,13 @@ from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
 
 flags.DEFINE_string('framework', 'tf', '(tf, tflite, trt')
-flags.DEFINE_string('weights', '/home/sh/catkin_ws/src/ros_yolov4/src/checkpoints/yolov4-tiny-416',
+flags.DEFINE_string('weights', '/home/sh/catkin_ws/src/CCTV_Layer_ROS/src/checkpoints/yolov4-tiny-416',
                     'path to weights file')
 flags.DEFINE_integer('size', 416, 'resize images to')
 flags.DEFINE_boolean('tiny', True, 'yolo or yolo-tiny')
 flags.DEFINE_string('model', 'yolov4', 'yolov3 or yolov4')
-flags.DEFINE_string('video', '/home/sh/catkin_ws/src/ros_yolov4/src/data/video/test.mp4', 'path to input video or set to 0 for webcam')
-flags.DEFINE_string('output', '/home/sh/catkin_ws/src/ros_yolov4/src/data/video/test.mp4', 'path to output video')
+flags.DEFINE_string('video', '/home/sh/catkin_ws/src/CCTV_Layer_ROS/src/data/video/test.mp4', 'path to input video or set to 0 for webcam')
+flags.DEFINE_string('output', '/home/sh/catkin_ws/src/CCTV_Layer_ROS/src/data/video/test.mp4', 'path to output video')
 flags.DEFINE_string('output_format', 'XVID', 'codec used in VideoWriter when saving video to file')
 flags.DEFINE_float('iou', 0.6, 'iou threshold')
 flags.DEFINE_float('score', 0.5, 'score threshold')
@@ -210,7 +210,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
     return result, map_2D, result_points
 
 def yolo2(result_points,points_3D,points_2D,encoder,infer,frame,image_data):
-    map_2D = cv2.imread("/home/sh/catkin_ws/src/ros_yolov4/src/map1.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/CCTV_Layer_ROS/src/map1.png")
     global pred_bbox
     global boxes
     pred_bbox = None
@@ -316,7 +316,7 @@ def main(_argv):
     nms_max_overlap = 1.0
 
     # initialize deep sort
-    model_filename = '/home/sh/catkin_ws/src/ros_yolov4/src/model_data/mars-small128.pb'
+    model_filename = '/home/sh/catkin_ws/src/CCTV_Layer_ROS/src/model_data/mars-small128.pb'
     encoder = gdet.create_box_encoder(model_filename, batch_size=64)
     # calculate cosine distance metric
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)

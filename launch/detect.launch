@@ -1,6 +1,6 @@
 <launch>
 <group ns="CCTV_Layer">
-  <node name="Desktop_YOLO" pkg="ros_yolov4" type="tracker0515.py" output="screen">
+  <node name="Desktop_YOLO" pkg="CCTV_Layer_ROS" type="tracker0515.py" output="screen">
   </node>
 </group>
 </launch>

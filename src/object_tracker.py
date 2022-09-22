@@ -19,7 +19,7 @@ from PIL import Image
 import rospy
 import roslib
 roslib.load_manifest('ex1')
-from ros_yolov4.msg import Locations, Coordinate
+from CCTV_Layer_ROS.msg import Locations, Coordinate
 import cv2
 from std_msgs.msg import String
 from sensor_msgs.msg import Image

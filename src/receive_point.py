@@ -3,7 +3,7 @@
 
 from __future__ import print_function
 import rospy				
-from ros_yolov4.msg import Locations, Coordinate
+from CCTV_Layer_ROS.msg import Locations, Coordinate
 
 
 def points_topic_callback(data):
