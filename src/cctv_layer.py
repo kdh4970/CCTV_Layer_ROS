@@ -306,7 +306,7 @@ def main(_argv):
     #initialize ROS node
     rospy.init_node('Desktop_YOLO', anonymous=False)
     pub = rospy.Publisher("/points",MultiPoint,queue_size=5)
-    rate = rospy.Rate(6)
+    rate = rospy.Rate(5)
     count = 1
 
     rospy.loginfo("Loading YOLO...")
