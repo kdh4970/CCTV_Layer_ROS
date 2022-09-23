@@ -45,6 +45,8 @@ flags.DEFINE_float('score', 0.5, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', True, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
+flags.DEFINE_string('method','old','(old,new)')
+
 
 def calibration(img):
     height, width, channels = img.shape
@@ -178,7 +180,8 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
             continue 
         bbox = track.to_tlbr()
         class_name = track.get_class()
-        cal = track.to_point(cal_val,track.track_id)
+        if FLAGS.method == 'new':
+            cal = track.to_point(cal_val,track.track_id)
         
 
         # draw bbox on screen
@@ -187,14 +190,18 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
         cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255,50,0), 2)
         cv2.rectangle(frame, (int(bbox[0]), int(bbox[1]-20)), (int(bbox[0])+(len(class_name)+len(str(track.track_id)))*13, int(bbox[1])), color, -1)
         cv2.putText(frame, class_name + "-" + str(track.track_id) ,(int(bbox[0]), int(bbox[1]-10)),0, 0.5, (255,255,255),2)
-        person_x = (int(bbox[0]) + int(bbox[2])) / 2
-        #print('x[0]=',bbox[0],' x[1]=',bbox[1],' x[2]=', bbox[2],' x[3]=',bbox[3])
-        # compare initial method with present method
-        if cal[track.track_id][int(bbox[1])][1] > (int(bbox[3]) - int(bbox[1])):
-            person_y = int(bbox[1]) + cal[track.track_id][int(bbox[1])][1]
-        else: 
+
+        if FLAGS.method == 'new':
+            person_x = (int(bbox[0]) + int(bbox[2])) / 2
+            # compare initial method with present method
+            if cal[track.track_id][int(bbox[1])][1] > (int(bbox[3]) - int(bbox[1])):
+                person_y = int(bbox[1]) + cal[track.track_id][int(bbox[1])][1]
+            else: 
+                person_y = bbox[3]
+        elif FLAGS.method == 'old':
+            person_x = (int(bbox[0]) + int(bbox[2])) / 2
             person_y = bbox[3]
-        #person_y = int(x[1])+ int(x[3]) - 5
+
         cv2.circle(frame, (int(person_x), int(person_y)), 5, (0,0,220), -1)
         new_x = ((Homo_mtx[0,0]*person_x)+(Homo_mtx[0,1]*person_y)+Homo_mtx[0,2])/((Homo_mtx[2,0]*person_x)+(Homo_mtx[2,1]*person_y)+1)
         new_y = ((Homo_mtx[1,0] * person_x) + (Homo_mtx[1,1] * person_y) + Homo_mtx[1,2]) / ((Homo_mtx[2,0] * person_x) + (Homo_mtx[2,1] * person_y) + 1)
@@ -310,8 +317,8 @@ def main(_argv):
     count = 1
 
     rospy.loginfo("Loading YOLO...")
-
-    cal_val = np.zeros((100,480,2)) # make calibration array
+    if FLAGS.method == 'new':
+        cal_val = np.zeros((100,480,2)) # make calibration array
 
     # Definition of the parameters
     max_cosine_distance = 0.4

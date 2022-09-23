@@ -1,7 +1,0 @@
-<launch>
-<group ns="CCTV_Layer_desktop">
-  <node name="YOLO" pkg="cctv_layer_ros" type="cctv_layer_geo.py" output="screen">
-    <param name="point calculating method" type="" value=""/>
-  </node>
-</group>
-</launch>
