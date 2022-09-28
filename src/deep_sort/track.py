@@ -113,17 +113,18 @@ class Track:
     def to_point(self,pointmat,num):
         bbox = self.to_tlbr()
         cal_arr=pointmat
-        
         id = num
-        if cal_arr[id][int(bbox[1])][1]==0: # Set initial value
-            cal_arr[id][int(bbox[1])][1] = int(bbox[3])-int(bbox[1]+10) 
-            for i in range(480): # Update value at nearby Cam
-                if int(bbox[1]) < i and cal_arr[id][int(bbox[1])][1] > cal_arr[id][i][1]:
-                    cal_arr[id][i][1] = cal_arr[id][int(bbox[1])][1] 
-        if True: # Update Maximum value
-            if cal_arr[id][int(bbox[1])][1] < (int(bbox[3])-int(bbox[1])+10):
-                cal_arr[id][int(bbox[1])][1] = int(bbox[3])-int(bbox[1]+10) 
-            print("ID=",id,", bbox1=",int(bbox[1]),", hgt=",cal_arr[id][int(bbox[1])][1])
+        if len(bbox)!=0:
+            hgt = int(bbox[3])-int(bbox[1])
+            if cal_arr[id][int(bbox[1])][1]==0: # Set initial value
+                cal_arr[id][int(bbox[1])][1] = hgt 
+                for i in range(480): 
+                    if i < int(bbox[1]) and cal_arr[id][i][1]==0: # Update matrix where far from camera
+                        cal_arr[id][i][1] = cal_arr[id][int(bbox[1])][1] - (int(bbox[1])-i)
+                    if i > int(bbox[1]) and cal_arr[id][int(bbox[1])][1] > cal_arr[id][i][1]: # Update matrix where close to camera
+                        cal_arr[id][i][1] = cal_arr[id][int(bbox[1])][1] + (i-int(bbox[1]))
+
+        print("ID=",id,", bbox1=",int(bbox[1]),", hgt=",cal_arr[id][int(bbox[1])][1])
 
         return cal_arr
 

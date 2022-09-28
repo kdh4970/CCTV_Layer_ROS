@@ -40,12 +40,12 @@ flags.DEFINE_string('model', 'yolov4', 'yolov3 or yolov4')
 flags.DEFINE_string('video', '/home/sh/catkin_ws/src/cctv_layer_ros/src/data/video/test.mp4', 'path to input video or set to 0 for webcam')
 flags.DEFINE_string('output', '/home/sh/catkin_ws/src/cctv_layer_ros/src/data/video/test.mp4', 'path to output video')
 flags.DEFINE_string('output_format', 'XVID', 'codec used in VideoWriter when saving video to file')
-flags.DEFINE_float('iou', 0.6, 'iou threshold')
-flags.DEFINE_float('score', 0.5, 'score threshold')
+flags.DEFINE_float('iou', 0.55, 'iou threshold')
+flags.DEFINE_float('score', 0.6, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', True, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
-flags.DEFINE_string('method','old','(old,new)')
+flags.DEFINE_string('method','new','(old,new)')
 
 
 def calibration(img):
@@ -69,7 +69,7 @@ def calibration(img):
     return dst
 
 def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,tracker_data):
-    map_2D = cv2.imread("map1.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map1.png")
     global pred_bbox, ind
     global boxes, cal_val
     pred_bbox = None
@@ -133,6 +133,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
        
     # custom allowed classes (uncomment line below to customize tracker for only people)
     allowed_classes = ['person']
+    
     # loop through objects and use class index to get class name, allow only classes in allowed_classes list
     names = []
     deleted_indx = []
@@ -141,7 +142,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
         class_indx = int(classes[i])
         class_name = class_names[class_indx]
         if class_name not in allowed_classes:
-            deleted_indx.append(i)
+            deleted_indx.append(i)    
         else:
             names.append(class_name)
     names = np.array(names)
@@ -195,7 +196,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
             person_x = (int(bbox[0]) + int(bbox[2])) / 2
             # compare initial method with present method
             if cal[track.track_id][int(bbox[1])][1] > (int(bbox[3]) - int(bbox[1])):
-                person_y = int(bbox[1]) + cal[track.track_id][int(bbox[1])][1]
+                person_y = int(bbox[1]) + cal[track.track_id][int(bbox[1])][1]-10
             else: 
                 person_y = bbox[3]
         elif FLAGS.method == 'old':
@@ -318,7 +319,7 @@ def main(_argv):
 
     rospy.loginfo("Loading YOLO...")
     if FLAGS.method == 'new':
-        cal_val = np.zeros((100,480,2)) # make calibration array
+        cal_val = np.zeros((110,480,2)) # make calibration array
 
     # Definition of the parameters
     max_cosine_distance = 0.4
@@ -401,13 +402,16 @@ def main(_argv):
         start_time = time.time()
 
         result_points = []
-
+    
+        
         # main cam homography points
-        points_3D =np.array([[418, 535], [537, 456], [378, 306], [317, 424]])
-        points_2D = np.array([[352, 240], [225, 206], [68, 333], [268, 349]])
+        points_3D =np.array([[664, 320], [404, 351], [315, 602], [692, 610]])
+        points_2D = np.array([[65, 142], [170, 272], [565, 297], [377, 118]])
         # sub cam homography points
-        points2_3D = np.array([[180, 252], [412, 257], [420, 171], [164, 120]])
-        points2_2D = np.array([[458, 424], [495, 253], [385, 237], [201, 426]])
+        points2_3D = np.array([[267, 168], [507, 185], [561, 254], [265, 248]])
+        points2_2D = np.array([[328, 363], [416, 208], [505, 186], [482, 394]])
+   
+        
         result, map_2D, result_points = yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data1,tracker1)
         result2, map_2D, result_points = yolo2(result_points,points2_3D,points2_2D,encoder,infer,frame2,image_data2)
         #result2, map_2D, result_points = yolo(result_points,np.array([[418, 535], [537, 456], [378, 306], [317, 424]]),np.array([[352, 240], [225, 206], [68, 333], [268, 349]]),encoder,infer,frame2,image_data2)
@@ -429,7 +433,7 @@ def main(_argv):
         count+=1
 
         for p in result_points:
-            cv2.circle(map_2D,p,6,(0,220,0),-1)
+            cv2.circle(map_2D,p,4,(0,220,0),-1)
         cv2.imshow("Video1", result)
         cv2.imshow("Video2", result2)
         cv2.imshow("2D",map_2D)
