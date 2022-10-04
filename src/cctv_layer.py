@@ -69,7 +69,7 @@ def calibration(img):
     return dst
 
 def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,tracker_data):
-    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map1.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map2.png")
     global pred_bbox, ind
     global boxes, cal_val
     pred_bbox = None
@@ -218,7 +218,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
     return result, map_2D, result_points
 
 def yolo2(result_points,points_3D,points_2D,encoder,infer,frame,image_data):
-    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map1.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map2.png")
     global pred_bbox
     global boxes
     pred_bbox = None
@@ -405,11 +405,11 @@ def main(_argv):
     
         
         # main cam homography points
-        points_3D =np.array([[664, 320], [404, 351], [315, 602], [692, 610]])
-        points_2D = np.array([[65, 142], [170, 272], [565, 297], [377, 118]])
+        points_3D =np.array([[842, 312], [335, 403], [427, 727], [830, 764]])
+        points_2D = np.array([[59, 114], [233, 405], [570, 232], [378, 91]])
         # sub cam homography points
-        points2_3D = np.array([[267, 168], [507, 185], [561, 254], [265, 248]])
-        points2_2D = np.array([[328, 363], [416, 208], [505, 186], [482, 394]])
+        points2_3D = np.array([[375, 162], [619, 175], [622, 254], [378, 259]])
+        points2_2D = np.array([[330, 347], [416, 196], [503, 202], [485, 378]])
    
         
         result, map_2D, result_points = yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data1,tracker1)
