@@ -40,8 +40,8 @@ flags.DEFINE_string('model', 'yolov4', 'yolov3 or yolov4')
 flags.DEFINE_string('video', '/home/sh/catkin_ws/src/cctv_layer_ros/src/data/video/test.mp4', 'path to input video or set to 0 for webcam')
 flags.DEFINE_string('output', '/home/sh/catkin_ws/src/cctv_layer_ros/src/data/video/test.mp4', 'path to output video')
 flags.DEFINE_string('output_format', 'XVID', 'codec used in VideoWriter when saving video to file')
-flags.DEFINE_float('iou', 0.55, 'iou threshold')
-flags.DEFINE_float('score', 0.6, 'score threshold')
+flags.DEFINE_float('iou', 0.40, 'iou threshold')
+flags.DEFINE_float('score', 0.45, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', True, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
@@ -405,10 +405,10 @@ def main(_argv):
     
         
         # main cam homography points
-        points_3D =np.array([[842, 312], [335, 403], [427, 727], [830, 764]])
+        points_3D =np.array([[632, 844], [529, 341], [212, 431], [182, 834]])
         points_2D = np.array([[59, 114], [233, 405], [570, 232], [378, 91]])
         # sub cam homography points
-        points2_3D = np.array([[375, 162], [619, 175], [622, 254], [378, 259]])
+        points2_3D = np.array([[779, 373], [771, 621], [673, 619], [682, 367]])
         points2_2D = np.array([[330, 347], [416, 196], [503, 202], [485, 378]])
    
         
