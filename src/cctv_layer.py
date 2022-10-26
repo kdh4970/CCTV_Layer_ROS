@@ -45,7 +45,7 @@ flags.DEFINE_float('score', 0.45, 'score threshold')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', True, 'show detailed info of tracked objects')
 flags.DEFINE_boolean('count', False, 'count objects being tracked on screen')
-flags.DEFINE_string('method','new','(old,new)')
+flags.DEFINE_string('method','old','(old,new)')
 
 
 def calibration(img):
