@@ -15,35 +15,3 @@ Python Interpreter version : Python 3.6.9
 OpenCV version : 4.1.1.26  
 Tensorflow version : 2.3.0  
 USB mono camera : PWC 500 (2EA)  
-
-## Initial Settings ( Do only first time )
-First. Download yolov4-tiny.weights into 'data' folder.  
-(https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights)  
-
-Second. Run save_model.py on terminal.
-```
-# save yolov4-tiny model
-python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints/yolov4-tiny-416 --model yolov4 --tiny
-```
-
-Third. Add PYTHONPATH  
-You should add 'msg' folder to PYTHONPATH.  
-
-Fourth. Set flags.define paths ( main script - track0515.py )  
-Change weights, video, output path.  
-
-Final. Do catkin_make.  
-
-
-## How to Use  
-First. Connect two usbwebcam.  
-Second. Execute launch file.  
-```
-$ roslaunch 'pkg name' detect.launch
-```
-
-
-
-
-## Base package
-TheAIGuysCode - yolov4-deepsort (https://github.com/theAIGuysCode/yolov4-deepsort)
