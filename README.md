@@ -1,7 +1,10 @@
 # cctv_layer_ros
 2022 Capstone Design (A - AGV)
-This package purpose is to use deepsort-yolov4 on ROS.   
-Finally, /YOLO node publish topic(/points).
+1. Get CCTV video by 2 usb webcam  
+2. Camera calibration  
+3. Get person's coordinate on video by Deep learning Yolo  
+4. Homography transform : video to 2D map  
+5. publish calculated coordinate group(/points ROS topic)  
 
 ## Development Environment
 
