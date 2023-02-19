@@ -69,7 +69,7 @@ def calibration(img):
     return dst
 
 def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,tracker_data):
-    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map2.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/cap.pgm")
     global pred_bbox, ind
     global boxes, cal_val
     pred_bbox = None
@@ -207,7 +207,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
         new_x = ((Homo_mtx[0,0]*person_x)+(Homo_mtx[0,1]*person_y)+Homo_mtx[0,2])/((Homo_mtx[2,0]*person_x)+(Homo_mtx[2,1]*person_y)+1)
         new_y = ((Homo_mtx[1,0] * person_x) + (Homo_mtx[1,1] * person_y) + Homo_mtx[1,2]) / ((Homo_mtx[2,0] * person_x) + (Homo_mtx[2,1] * person_y) + 1)
 
-        result_points.append((int(new_x),int(new_y)))
+        result_points.append((int(new_x),int(new_y),str(track.track_id)))
     
         # if enable info flag then print details about each track
         if FLAGS.info:
@@ -218,7 +218,7 @@ def yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data,track
     return result, map_2D, result_points
 
 def yolo2(result_points,points_3D,points_2D,encoder,infer,frame,image_data):
-    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/map2.png")
+    map_2D = cv2.imread("/home/sh/catkin_ws/src/cctv_layer_ros/src/cap.pgm")
     global pred_bbox
     global boxes
     pred_bbox = None
@@ -305,7 +305,7 @@ def yolo2(result_points,points_3D,points_2D,encoder,infer,frame,image_data):
         result_points.append((int(new_x),int(new_y)))
 
     result = np.asarray(frame)
-    result = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        # displaying the coordinatesv2.COLOR_RGB2BGR)
     return result, map_2D, result_points   
 
 def main(_argv):
@@ -314,7 +314,7 @@ def main(_argv):
     #initialize ROS node
     rospy.init_node('Desktop_YOLO', anonymous=False)
     pub = rospy.Publisher("/points",MultiPoint,queue_size=5)
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(8)
     count = 1
 
     rospy.loginfo("Loading YOLO...")
@@ -357,8 +357,8 @@ def main(_argv):
 
     # begin video capture
     try:
-        vid = cv2.VideoCapture(0)
-        vid2 = cv2.VideoCapture(2)
+        vid = cv2.VideoCapture(2)
+        vid2 = cv2.VideoCapture(0)
     except:
         vid = cv2.VideoCapture(video_path)
 
@@ -405,11 +405,11 @@ def main(_argv):
     
         
         # main cam homography points
-        points_3D =np.array([[632, 844], [529, 341], [212, 431], [182, 834]])
+        points_3D =np.array([[1062, 906], [963, 923], [980, 992], [1063, 994]])
         points_2D = np.array([[59, 114], [233, 405], [570, 232], [378, 91]])
         # sub cam homography points
-        points2_3D = np.array([[779, 373], [771, 621], [673, 619], [682, 367]])
-        points2_2D = np.array([[330, 347], [416, 196], [503, 202], [485, 378]])
+        points2_3D = np.array([[971, 875], [1025, 877], [1033, 896], [964, 897]])
+        points2_2D = np.array([[331, 343], [416, 188], [509, 169], [489, 412]])
    
         
         result, map_2D, result_points = yolo1(result_points,points_3D,points_2D,encoder,infer,frame,image_data1,tracker1)
@@ -432,8 +432,12 @@ def main(_argv):
         rate.sleep()
         count+=1
 
-        for p in result_points:
-            cv2.circle(map_2D,p,4,(0,220,0),-1)
+        for p in range(len(result_points)):
+            cv2.circle(map_2D,(result_points[p][0],result_points[p][1]),4,(0,220,0),-1)
+            try:
+                cv2.putText(map_2D,result_points[i][2] ,(x_value, y_value-5),0, 0.5, (255,0,0),2)
+            except IndexError as result_points:
+                pass
         cv2.imshow("Video1", result)
         cv2.imshow("Video2", result2)
         cv2.imshow("2D",map_2D)
